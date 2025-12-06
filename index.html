@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Sanvi 💗🎄</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+body{
+    font-family:'Poppins',sans-serif;
+    margin:0;
+    overflow-x:hidden;
+    text-align:center;
+    background: linear-gradient(to top right,#ff9a9e,#ffc0cb);
+    color:white;
+    position:relative;
+}
+
+/* Title shimmer */
+.title{
+    font-size:3em;
+    font-weight:700;
+    margin-top:20px;
+    background: linear-gradient(45deg,#ff6f91,#ffdde1,#ff9a9e,#ffc0cb);
+    background-size:300% 300%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation: shimmer 6s ease infinite;
+}
+@keyframes shimmer{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* Countdown */
+#countdown{
+    font-size:2em;
+    margin:15px 0;
+    text-shadow:0 0 10px rgba(0,0,0,0.4);
+}
+
+/* Buttons */
+button{
+    padding:12px 25px;
+    font-size:1.2em;
+    border:none;
+    border-radius:15px;
+    background:#ff6f91;
+    color:white;
+    cursor:pointer;
+    margin-top:20px;
+    transition:0.3s;
+}
+button:hover{transform:scale(1.1);}
+
+/* Secret message popup */
+#secretBox{
+    display:none;
+    position:fixed;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:80%;
+    max-width:350px;
+    max-height:70vh;
+    overflow-y:auto;
+    background:white;
+    color:#333;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 0 25px rgba(0,0,0,0.3);
+    z-index:999;
+    text-align:center;
+}
+#secretBox img{
+    max-width:70%;
+    border-radius:15px;
+    margin-bottom:10px;
+}
+.close{float:right; cursor:pointer; font-weight:bold;}
+
+/* Slider gallery */
+#gallerySlider{
+    display:none;
+    margin-top:20px;
+}
+#sliderContainer{
+    max-width:350px;
+    margin:0 auto;
+    position:relative;
+}
+#sliderContainer img{
+    width:100%;
+    border-radius:15px;
+}
+#prev,#next{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:#ff6f91;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+    opacity:0.8;
+}
+#prev:hover,#next:hover{opacity:1;}
+#prev{left:-50px;}
+#next{right:-50px;}
+</style>
+</head>
+<body>
+
+<audio id="bgm" src="your-song.wav" loop></audio>
+
+<div class="title">Happy Birthday Sanvi 💗🎄</div>
+<div id="countdown"></div>
+
+<button id="openBtn">Open Your Surprise 🎁</button>
+
+<div id="secretBox">
+    <span class="close" id="closeBox">X</span>
+    <img src="popup-image.jpg" alt="For You">
+    <p id="message"></p>
+    <button id="showGalleryBtn" style="display:none;">Click Here for Memories 💖</button>
+</div>
+
+<div id="gallerySlider">
+    <div id="sliderContainer">
+        <img id="slideImg" src="pic1.jpg">
+        <button id="prev">&#8592;</button>
+        <button id="next">&#8594;</button>
+    </div>
+</div>
+
+<script>
+/* Countdown */
+function updateCountdown(){
+    const now=new Date();
+    let year=now.getFullYear();
+    let birthday=new Date(`December 25, ${year} 00:00:00`);
+    if(now>birthday) birthday=new Date(`December 25, ${year+1} 00:00:00`);
+    const diff=birthday-now;
+    const d=Math.floor(diff/(1000*60*60*24));
+    const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const m=Math.floor((diff%(1000*60*60))/(1000*60));
+    const s=Math.floor((diff%(1000*60))/1000);
+    document.getElementById("countdown").innerHTML=`Your special day is almost here 💗: ${d}d ${h}h ${m}m ${s}s`;
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+/* Floating hearts */
+setInterval(()=>{
+    let heart=document.createElement("div");
+    heart.innerHTML="❤";
+    heart.style.position="fixed";
+    heart.style.bottom="-20px";
+    heart.style.left=Math.random()*window.innerWidth+"px";
+    heart.style.fontSize=(20+Math.random()*10)+"px";
+    heart.style.color="#ff4f77";
+    heart.style.animation="floatUp 4s linear infinite";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+},600);
+
+/* Secret message typing */
+const openBtn=document.getElementById("openBtn");
+const secretBox=document.getElementById("secretBox");
+const messageTxt="Sanvi, you are my bestest friend, my biggest supporter, and my forever love 💖 Every moment with you is magical. Happy Birthday, my precious girl! – Shreyansh 💗";
+const showGalleryBtn=document.getElementById("showGalleryBtn");
+const bgm=document.getElementById("bgm");
+
+openBtn.addEventListener("click",()=>{
+    openBtn.style.display="none";
+    secretBox.style.display="block";
+
+    // Play music softly
+    bgm.volume = 0.2;
+    bgm.play().catch(()=>{}); // handles autoplay restrictions
+
+    let i=0;
+    function typeMsg(){
+        if(i<messageTxt.length){
+            document.getElementById("message").innerHTML+=messageTxt.charAt(i);
+            i++; setTimeout(typeMsg,50);
+        } else {
+            showGalleryBtn.style.display="inline-block";
+        }
+    }
+    typeMsg();
+});
+
+/* Close popup */
+document.getElementById("closeBox").onclick=()=>{secretBox.style.display="none";};
+
+/* Slider gallery */
+const images=["pic1.jpg","pic2.jpg","pic3.jpg","pic4.jpg","pic5.jpg"];
+let index=0;
+const slideImg=document.getElementById("slideImg");
+document.getElementById("prev").onclick=()=>{
+    index=(index-1+images.length)%images.length;
+    slideImg.src=images[index];
+};
+document.getElementById("next").onclick=()=>{
+    index=(index+1)%images.length;
+    slideImg.src=images[index];
+};
+showGalleryBtn.onclick=()=>{
+    secretBox.style.display="none";
+    document.getElementById("gallerySlider").style.display="block";
+};
+</script>
+
+<style>
+@keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-700px);opacity:0}}
+</style>
+
+</body>
+</html>
